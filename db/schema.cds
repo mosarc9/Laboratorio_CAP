@@ -2,6 +2,17 @@ namespace com.logali;
 
 using {cuid} from '@sap/cds/common';
 
+define type Name : String(50);
+
+type Address     : {
+    Street     : String;
+    City       : String;
+    State      : String(2);
+    PostalCode : String(5);
+    Country    : String(3);
+};
+
+
 entity Products : cuid {
     Name             : String;
     Description      : String;
@@ -16,15 +27,16 @@ entity Products : cuid {
 };
 
 entity Suppliers : cuid {
-    Name       : String;
-    Street     : String;
-    City       : String;
-    State      : String(2);
-    PostalCode : String(5);
-    Country    : String(3);
-    Email      : String;
-    Phone      : String;
-    Fax        : String;
+    Name    : String;
+    // Street     : String;
+    // City       : String;
+    // State      : String(2);
+    // PostalCode : String(5);
+    // Country    : String(3);
+    Address : Address;
+    Email   : String;
+    Phone   : String;
+    Fax     : String;
 };
 
 entity Categories {
