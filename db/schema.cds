@@ -68,6 +68,9 @@ entity Products : cuid {
     Width            : Decimal(16, 2);
     Depth            : Decimal(16, 2);
     Quantity         : Decimal(16, 2);
+    Supplier         : Association to Suppliers;
+    UnitOfMeasure    : Association to UnitOfMeasures;
+    toDimensionUnits : Association to DimensionUnits;
 };
 
 entity Suppliers : cuid {
@@ -122,21 +125,21 @@ entity SalesData : cuid {
 
 //Entidades Select
 
-entity SelProducts                 as select from Products;
+entity SelProducts   as select from Products;
 
-entity SelProducts1                as
+entity SelProducts1  as
     select from Products {
         *
     };
 
-entity SelProducts2                as
+entity SelProducts2  as
     select from Products {
         Name,
         Price,
         Quantity,
     };
 
-entity SelProducts3                as
+entity SelProducts3  as
     select from Products
     left join ProductReview
         on Products.Name = ProductReview.Name
@@ -153,14 +156,14 @@ entity SelProducts3                as
 
 //Entity as Projections
 
-entity ProjProducts                as projection on Products;
+entity ProjProducts  as projection on Products;
 
-entity ProjProducts2               as
+entity ProjProducts2 as
     projection on Products {
         *
     };
 
-entity ProjProducts3               as
+entity ProjProducts3 as
     projection on Products {
         ReleaseDate,
         Name
@@ -168,11 +171,18 @@ entity ProjProducts3               as
 
 // Entity with parameters
 
-entity ParamPrducts(pName: String) as
-    select from Products {
-        Name,
-        Price,
-        Quantity
-    }
-    where
-        Name = :pName;
+//entity ParamPrducts(pName: String) as
+//    select from Products {
+//        Name,
+//        Price,
+//        Quantity
+//    }
+//    where
+//        Name = :pName;
+
+//entity ProjParamProducts(pName: String ) as projection on Products where Name = :pName;
+
+extend Products with {
+    PriceCondition     : String(2);
+    PriceDetermination : String(3);
+};
