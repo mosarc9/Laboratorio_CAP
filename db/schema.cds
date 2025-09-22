@@ -1,6 +1,9 @@
 namespace com.logali;
 
-using {cuid} from '@sap/cds/common';
+using {
+    cuid,
+    managed
+} from '@sap/cds/common';
 
 define type Name        : String(50);
 
@@ -77,6 +80,20 @@ entity Products : cuid {
     Reviews          : Association to many ProductReview
                            on Reviews.Product = $self;
 };
+
+entity Orders : cuid {
+    Date     : Date;
+    Customer : String;
+    Item     : Composition of many OrderItems
+                   on Item.Order = $self;
+}
+
+entity OrderItems : cuid {
+    Order    : Association to Orders;
+    Product  : Association to Products;
+    Quantity : Integer;
+
+}
 
 entity Suppliers : cuid {
     Name    : Products:Name; //String;
@@ -199,20 +216,17 @@ extend Products with {
 };
 
 
-entity Student {
-    key ID     : UUID;
-        Course : Association to many StudentCourse
-                     on Course.Student = $self;
+entity Student : cuid {
+    Course : Association to many StudentCourse
+                 on Course.Student = $self;
 }
 
-entity Course {
-    key ID : UUID;
-    Student: Association to many StudentCourse on
-        Student.Course = $self;
+entity Course : cuid {
+    Student : Association to many StudentCourse
+                  on Student.Course = $self;
 }
 
-entity StudentCourse {
-    key ID      : UUID;
-        Student : Association to Student;
-        Course  : Association to Course;
+entity StudentCourse : cuid {
+    Student : Association to Student;
+    Course  : Association to Course;
 }
