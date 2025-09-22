@@ -70,7 +70,12 @@ entity Products : cuid {
     Quantity         : Decimal(16, 2);
     Supplier         : Association to Suppliers;
     UnitOfMeasure    : Association to UnitOfMeasures;
-    toDimensionUnits : Association to DimensionUnits;
+    Currency         : Association to Currencies;
+    DimensionUnits   : Association to DimensionUnits;
+    SalesData        : Association to many SalesData
+                           on SalesData.Product = $self;
+    Reviews          : Association to many ProductReview
+                           on Reviews.Product = $self;
 };
 
 entity Suppliers : cuid {
@@ -79,6 +84,8 @@ entity Suppliers : cuid {
     Email   : String;
     Phone   : String;
     Fax     : String;
+    Product : Association to many Products
+                  on Product.Supplier;
 };
 
 entity Categories {
@@ -112,15 +119,19 @@ entity Months {
         ShortDescription : String(3);
 };
 
-entity ProductReview {
-    key Name    : String;
-        Rating  : Integer;
-        Comment : String;
+entity ProductReview : cuid {
+    Name    : String;
+    Rating  : Integer;
+    Comment : String;
+    Product : Association to Products;
 };
 
 entity SalesData : cuid {
-    DeliveryDate : DateTime;
-    Revenue      : Decimal(16, 2);
+    DeliveryDate  : DateTime;
+    Revenue       : Decimal(16, 2);
+    Product       : Association to Products;
+    Currency      : Association to Currencies;
+    DeliveryMonth : Association to Months;
 };
 
 //Entidades Select
