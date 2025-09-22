@@ -60,9 +60,9 @@ entity Car : cuid {
     virtual discount_2 : Decimal;
 }
 
-entity Products : cuid {
-    Name             : String not null;
-    Description      : String;
+entity Products : cuid, managed {
+    Name             : localized String not null;
+    Description      : localized String;
     ImageUrl         : String;
     ReleaseDate      : DateTime default $now;
     DiscontinuedDate : DateTime;
@@ -95,8 +95,8 @@ entity OrderItems : cuid {
 
 }
 
-entity Suppliers : cuid {
-    Name    : Products:Name; //String;
+entity Suppliers : cuid, managed {
+    Name    : localized Products:Name; //String;
     Address : Address;
     Email   : String;
     Phone   : String;
@@ -107,22 +107,23 @@ entity Suppliers : cuid {
 
 entity Categories {
     key ID   : String(1);
-        Name : String;
+        Name : localized String;
 };
 
 entity StockAvailability {
     key ID          : Integer;
-        Description : String;
+        Description : localized String;
+        Product : Association to Products;
 };
 
 entity Currencies {
     key ID          : String(3);
-        Description : String;
+        Description : localized String;
 };
 
 entity UnitOfMeasures {
     key ID          : String(2);
-        Description : String;
+        Description : localized String;
 };
 
 entity DimensionUnits {
@@ -132,18 +133,18 @@ entity DimensionUnits {
 
 entity Months {
     key ID               : String(2);
-        Description      : String;
-        ShortDescription : String(3);
+        Description      : localized String;
+        ShortDescription : localized String(3);
 };
 
-entity ProductReview : cuid {
+entity ProductReview : cuid, managed {
     Name    : String;
     Rating  : Integer;
     Comment : String;
     Product : Association to Products;
 };
 
-entity SalesData : cuid {
+entity SalesData : cuid, managed {
     DeliveryDate  : DateTime;
     Revenue       : Decimal(16, 2);
     Product       : Association to Products;
