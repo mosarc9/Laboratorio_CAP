@@ -83,9 +83,9 @@ define service ProductsService {
         };
 
     entity VH_Currencies     as
-        select from logali.materials.Categories {
-            ID   as Code,
-            Name as Text,
+        select from logali.materials.Currencies {
+            ID          as Code,
+            Description as Text,
         };
 
     entity VH_UnitOfMeasure  as
