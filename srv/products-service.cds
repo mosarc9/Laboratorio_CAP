@@ -16,29 +16,30 @@ using {com.training as training} from '../db/training';
 
 define service ProductsService {
 
-    entity Products          as
+   define entity Products          as
         select from logali.materials.Products {
             ID,
-            Name          as ProductName,
-            Description,
+            Name          as ProductName     @mandatory,
+            Description                      @mandatory,
             ImageUrl,
             ReleaseDate,
             DiscontinuedDate,
-            Price,
+            Price                            @mandatory,
             Height,
             Width,
             Depth,
-            Quantity,
-            UnitOfMeasure as ToUnitOfMeasure,
-            Currency      as ToCurrency,
-            Category      as ToCategory,
-            Category.Name as Category,
+            Quantity                         @mandatory,
+            UnitOfMeasure as ToUnitOfMeasure @mandatory,
+            Currency      as ToCurrency      @mandatory,
+            Category      as ToCategory      @mandatory,
+            Category.Name as Category        @readonly,
             DimensionUnit as ToDimensionUnit,
             SalesDate,
             Supplier,
             Reviews
         };
 
+    @readonly
     entity Salesdata         as
         select from logali.sales.SalesData {
             ID,
@@ -50,6 +51,7 @@ define service ProductsService {
             Product                   as ToProduct
         };
 
+    @readonly
     entity Suppliers         as
         select from logali.sales.Suppliers {
             ID,
@@ -60,6 +62,7 @@ define service ProductsService {
             Product as ToProduct
         };
 
+    @readonly
     entity Reviews           as
         select from logali.materials.ProductReview {
             ID,
@@ -69,6 +72,7 @@ define service ProductsService {
             Product,
         };
 
+    @readonly
     entity StockAvailability as
         select from logali.materials.StockAvailability {
             ID,
@@ -76,24 +80,28 @@ define service ProductsService {
             Product as ToProduct
         };
 
+    @readonly
     entity VH_Categories     as
         select from logali.materials.Categories {
             ID   as Code,
             Name as Text,
         };
 
+    @readonly
     entity VH_Currencies     as
         select from logali.materials.Currencies {
             ID          as Code,
             Description as Text,
         };
 
+    @readonly
     entity VH_UnitOfMeasure  as
         select from logali.materials.UnitOfMeasures {
             ID          as Code,
             Description as Text,
         };
 
+    @readonly
     entity VH_DimensionUnits as
         select from logali.materials.DimensionUnits {
             ID          as Code,
