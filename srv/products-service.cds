@@ -1,15 +1,102 @@
 using {com.logali as logali} from '../db/schema';
 using {com.training as training} from '../db/training';
 
-service ProductsService {
-    entity Products      as projection on logali.materials.Products;
-    entity Currency      as projection on logali.materials.Currencies;
-    entity DimensionUnit as projection on logali.materials.DimensionUnits;
-    entity Category      as projection on logali.materials.Categories;
-    entity Review        as projection on logali.materials.ProductReview;
-    entity UnitOfMeasure as projection on logali.materials.UnitOfMeasures;
+// service ProductsService {
+//     entity Products      as projection on logali.materials.Products;
+//     entity Currency      as projection on logali.materials.Currencies;
+//     entity DimensionUnit as projection on logali.materials.DimensionUnits;
+//     entity Category      as projection on logali.materials.Categories;
+//     entity Review        as projection on logali.materials.ProductReview;
+//     entity UnitOfMeasure as projection on logali.materials.UnitOfMeasures;
 
-    entity Suppliers     as projection on logali.sales.Suppliers;
-    entity SalesData     as projection on logali.sales.SalesData;
-    entity Month         as projection on logali.sales.Months;
-}
+//     entity Suppliers     as projection on logali.sales.Suppliers;
+//     entity SalesData     as projection on logali.sales.SalesData;
+//     entity Month         as projection on logali.sales.Months;
+// }
+
+define service ProductsService {
+
+    entity Products          as
+        select from logali.materials.Products {
+            ID,
+            Name          as ProductName,
+            Description,
+            ImageUrl,
+            ReleaseDate,
+            DiscontinuedDate,
+            Price,
+            Height,
+            Width,
+            Depth,
+            Quantity,
+            UnitOfMeasure as ToUnitOfMeasure,
+            Currency      as ToCurrency,
+            Category      as ToCategory,
+            Category.Name as Category,
+            DimensionUnit as ToDimensionUnit,
+            SalesDate,
+            Supplier,
+            Reviews
+        };
+
+    entity Salesdata         as
+        select from logali.sales.SalesData {
+            ID,
+            DeliveryDate,
+            Revenue,
+            Currency.ID               as CurrencyKey,
+            DeliveryMonth.ID          as DeliveryMonthId,
+            DeliveryMonth.Description as DeliveryMonth,
+            Product                   as ToProduct
+        };
+
+    entity Suppliers         as
+        select from logali.sales.Suppliers {
+            ID,
+            Name,
+            Email,
+            Phone,
+            Fax,
+            Product as ToProduct
+        };
+
+    entity Reviews           as
+        select from logali.materials.ProductReview {
+            ID,
+            Name,
+            Rating,
+            CreatedAt,
+            Product,
+        };
+
+    entity StockAvailability as
+        select from logali.materials.StockAvailability {
+            ID,
+            Description,
+            Product as ToProduct
+        };
+
+    entity VH_Categories     as
+        select from logali.materials.Categories {
+            ID   as Code,
+            Name as Text,
+        };
+
+    entity VH_Currencies     as
+        select from logali.materials.Categories {
+            ID   as Code,
+            Name as Text,
+        };
+
+    entity VH_UnitOfMeasure  as
+        select from logali.materials.UnitOfMeasures {
+            ID          as Code,
+            Description as Text,
+        };
+
+    entity VH_DimensionUnits as
+        select from logali.materials.DimensionUnits {
+            ID          as Code,
+            Description as Text,
+        };
+};
