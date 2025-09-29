@@ -32,7 +32,8 @@ context materials {
         Supplier         : Association to sales.Suppliers;
         UnitOfMeasure    : Association to UnitOfMeasures;
         Currency         : Association to Currencies;
-        DimensionUnits   : Association to DimensionUnits;
+        DimensionUnit    : Association to DimensionUnits;
+        Category         : Association to Categories;
         SalesData        : Association to many sales.SalesData
                                on SalesData.Product = $self;
         Reviews          : Association to many ProductReview
@@ -66,10 +67,11 @@ context materials {
     };
 
     entity ProductReview : cuid, managed {
-        Name    : String;
-        Rating  : Integer;
-        Comment : String;
-        Product : Association to Products;
+        Name      : String;
+        Rating    : Integer;
+        Comment   : String;
+        CreatedAt : Date default $now;
+        Product   : Association to Products;
     };
 
     //Entidades Select

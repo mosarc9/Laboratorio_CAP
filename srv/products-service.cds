@@ -16,25 +16,26 @@ using {com.training as training} from '../db/training';
 
 define service ProductsService {
 
-   define entity Products          as
+    define entity Products   as
         select from logali.materials.Products {
-            ID,
-            Name          as ProductName     @mandatory,
-            Description                      @mandatory,
-            ImageUrl,
-            ReleaseDate,
-            DiscontinuedDate,
-            Price                            @mandatory,
-            Height,
-            Width,
-            Depth,
+            // ID,
+            // Name          as ProductName     @mandatory,
+            // Description                      @mandatory,
+            // ImageUrl,
+            // ReleaseDate,
+            // DiscontinuedDate,
+            // Price                            @mandatory,
+            // Height,
+            // Width,
+            // Depth,
+            *,
             Quantity                         @mandatory,
             UnitOfMeasure as ToUnitOfMeasure @mandatory,
             Currency      as ToCurrency      @mandatory,
             Category      as ToCategory      @mandatory,
             Category.Name as Category        @readonly,
             DimensionUnit as ToDimensionUnit,
-            SalesDate,
+            SalesData,
             Supplier,
             Reviews
         };
@@ -68,8 +69,9 @@ define service ProductsService {
             ID,
             Name,
             Rating,
+            Comment,
             CreatedAt,
-            Product,
+            Product as ToProduct,
         };
 
     @readonly
@@ -103,8 +105,47 @@ define service ProductsService {
 
     @readonly
     entity VH_DimensionUnits as
-        select from logali.materials.DimensionUnits {
+        select
             ID          as Code,
-            Description as Text,
-        };
+            Description as Text
+        from logali.materials.DimensionUnits;
 };
+
+
+define service MyService {
+
+    entity SuppliersProduct as
+        select from logali.materials.Products[Name = 'Bread']{
+            *,
+            Name,
+            Description,
+            Supplier.Address
+        }
+        where
+            Supplier.Address.PostalCode = 98074;
+
+
+    entity SuppliersToSales as
+
+        select
+            Supplier.Email,
+            Category.Name,
+            SalesData.Currency.ID,
+            SalesData.Currency.Description
+        from logali.materials.Products;
+
+    entity EntityInfix      as
+        select Supplier[Name = 'Exotic Liquids'].Phone
+
+        from logali.materials.Products
+        where
+            Products.Name = 'Bread';
+
+    entity EntityJoin       as
+        select Phone from logali.materials.Products as a
+        left join logali.sales.Suppliers as b
+            on  a.ID          = b.ID
+            and Supplier.Name = 'Exotic Liquids'
+        where
+            a.Name = 'Bread';
+}
