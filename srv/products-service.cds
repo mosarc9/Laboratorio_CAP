@@ -18,18 +18,23 @@ define service ProductsService {
 
     define entity Products   as
         select from logali.materials.Products {
-            // ID,
-            // Name          as ProductName     @mandatory,
-            // Description                      @mandatory,
-            // ImageUrl,
-            // ReleaseDate,
-            // DiscontinuedDate,
-            // Price                            @mandatory,
-            // Height,
-            // Width,
-            // Depth,
-            *,
-            Quantity                         @mandatory,
+            ID,
+            Name          as ProductName     @mandatory,
+            Description                      @mandatory,
+            ImageUrl,
+            ReleaseDate,
+            DiscontinuedDate,
+            Price                            @mandatory,
+            Height,
+            Width,
+            Depth,
+            Quantity                         @(
+                mandatory,
+                assert.range: [
+                    0.00,
+                    20.00
+                ]
+            ),
             UnitOfMeasure as ToUnitOfMeasure @mandatory,
             Currency      as ToCurrency      @mandatory,
             Category      as ToCategory      @mandatory,
@@ -38,6 +43,7 @@ define service ProductsService {
             SalesData,
             Supplier,
             Reviews
+
         };
 
     @readonly
@@ -70,7 +76,7 @@ define service ProductsService {
             Name,
             Rating,
             Comment,
-            CreatedAt,
+            // CreatedAt,
             Product as ToProduct,
         };
 
@@ -142,10 +148,18 @@ define service MyService {
             Products.Name = 'Bread';
 
     entity EntityJoin       as
-        select Phone from logali.materials.Products as a
+        select Phone from logali.materials.Products
         left join logali.sales.Suppliers as b
-            on  a.ID          = b.ID
-            and Supplier.Name = 'Exotic Liquids'
+            on (
+                b.ID   = Products.Supplier.ID
+            )
+            and b.Name = 'Exotic Liquids'
         where
-            a.Name = 'Bread';
+            Products.Name = 'Bread';
+}
+
+define service Reports {
+
+    entity AverageRating as projection on logali.reports.AverageRating;
+
 }
