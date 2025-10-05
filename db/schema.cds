@@ -203,5 +203,6 @@ context reports {
                 else 1
             end                           as StockAvailability : Integer,
             TostockAvailability
-        }
-}
+        };
+
+};

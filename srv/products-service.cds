@@ -43,6 +43,9 @@ define service ProductsService {
             SalesData,
             Supplier,
             Reviews
+            // Rating,
+            // StockAvailability,
+            // TostockAvailability
 
         };
 
@@ -156,10 +159,26 @@ define service MyService {
             and b.Name = 'Exotic Liquids'
         where
             Products.Name = 'Bread';
-}
+};
 
 define service Reports {
 
     entity AverageRating as projection on logali.reports.AverageRating;
 
-}
+    
+    entity EntityCasting as
+        select
+            cast(
+                Price as Integer
+            )     as Price,
+            Price as Price2 : Integer
+        from logali.materials.Products;
+
+    entity EntityExists  as
+        select from logali.materials.Products {
+            Name
+        }
+        where
+            exists Supplier[Name = 'Exotic Liquids'];
+
+};
