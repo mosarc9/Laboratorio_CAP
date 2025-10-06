@@ -85,7 +85,5 @@ entity Orders{
     CreatedOn : Date;
     Reviewed : Boolean;
     Approved : Boolean;
-    Country_code;
-    Status
 }
 
